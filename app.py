@@ -12,6 +12,9 @@ import time
 from PIL import Image
 
 
+
+st.set_option('deprecation.showfileUploaderEncoding', False)  
+
 IMAGE_SIZE = 128
 GENDER_MAPPING = ["Male", "Female"]
 

@@ -64,5 +64,6 @@ urllib3
 watchdog
 Werkzeug
 wrapt
+gdown
 opencv-python-headless
 

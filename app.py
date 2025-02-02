@@ -90,10 +90,31 @@ def crop_head(image_path, expansion=0.05):
     return None
 
 
+import gdown
+import os
+
+@st.cache_resource
+def download_model_from_gdrive():
+    gdrive_file_id = "13s8_XZ5Q-s1zMyu1BlosawXrvm7EAVQ8"  
+    output_path = "AgeGenderModel.h5"
+
+    if not os.path.exists(output_path):
+        gdown.download(
+            f"https://drive.google.com/uc?id={gdrive_file_id}",
+            output_path,
+            quiet=False,
+        )
+    return output_path
+
+
+model_path = download_model_from_gdrive()
+model = load_model(model_path, custom_objects={"mae": MeanAbsoluteError()})
+
+
 @st.cache_resource
 def load_model_once():
     model = load_model(
-        "AgeGenderModel.h5",
+        model_path,
         custom_objects={"mae": MeanAbsoluteError()},
     )
     return model
@@ -180,7 +201,7 @@ def generate_pdf_report(image_data, predicted_age, predicted_gender):
 
 def main():
     st.title("Age and Gender Prediction with Report Generation")
-    st.image("Logo.png", use_container_width=True)
+    st.image("Logo.png", use_column_width=True)
     st.write(
         "Upload an image or capture an image using your webcam to predict age and gender."
     )
@@ -228,7 +249,7 @@ def main():
             temp_file_path = "temp_uploaded_image.jpg"
             img.save(temp_file_path, "JPEG")
 
-            st.image(temp_file_path, caption="Uploaded Image", use_container_width=True)
+            st.image(temp_file_path, caption="Uploaded Image", use_column_width=True)
 
             model = load_model_once()
 
@@ -273,7 +294,7 @@ def main():
                 st.image(
                     st.session_state.upload_cropped_head,
                     caption="Cropped Face Image",
-                    use_container_width=True,
+                    use_column_width=True,
                 )
 
             if (
@@ -346,7 +367,7 @@ def main():
                         frame,
                         channels="BGR",
                         caption="Captured Image",
-                        use_container_width=True,
+                        use_column_width=True,
                     )
                     st.success(
                         "Image captured successfully! Click 'Make Prediction' to proceed."
@@ -410,7 +431,7 @@ def main():
                     #     st.image(
                     #         st.session_state.capture_cropped_head,
                     #         caption="Cropped Face Image",
-                    #         use_container_width =True,
+                    #         use_column_width =True,
                     #     )
 
                     # # Generate and download the report

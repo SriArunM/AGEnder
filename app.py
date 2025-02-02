@@ -11,9 +11,9 @@ from fpdf import FPDF
 import time
 from PIL import Image
 
+import warnings
+warnings.filterwarnings("ignore")
 
-
-st.set_option('deprecation.showfileUploaderEncoding', False)  
 
 IMAGE_SIZE = 128
 GENDER_MAPPING = ["Male", "Female"]
